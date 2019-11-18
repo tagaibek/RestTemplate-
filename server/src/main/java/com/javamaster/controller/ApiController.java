@@ -1,7 +1,6 @@
 package com.javamaster.controller;
 
 import com.javamaster.converter.CustomUserToUserConverter;
-import com.javamaster.model.CustomUser;
 import com.javamaster.model.User;
 import com.javamaster.repos.RoleRepo;
 import com.javamaster.repos.UserRepo;
@@ -38,7 +37,7 @@ public class ApiController {
     }
 
     @PostMapping(path = "/user")
-    public ResponseEntity<User> create(@RequestBody Map<String, Object> map) {
+    public ResponseEntity<List<User>> create(@RequestBody Map<String, Object> map) {
         CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter(roleRepo);
 
         LinkedHashMap hashMap = (LinkedHashMap) map.get("customUser");
@@ -48,24 +47,29 @@ public class ApiController {
         if (userNew == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(userNew);
+            List<User> list = new ArrayList<>();
+            list.add(userNew);
+            return ResponseEntity.ok(list);
         }
     }
 
-    /*@PutMapping(path = "/user/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<User> update(CustomUser customUser) {
+    @PutMapping(path = "/user/update")
+    public ResponseEntity<List<User>> update(@RequestBody Map<String, Object> map) {
         CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter(roleRepo);
-        User user = customUserToUserConverter.convert(customUser);
+        LinkedHashMap hashMap = (LinkedHashMap) map.get("user");
+        User user = customUserToUserConverter.convert(hashMap );
         User userUpd = userRepo.save(user);
         if (userUpd == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(userUpd);
+            List<User> list = new ArrayList<>();
+            list.add(userUpd);
+            return ResponseEntity.ok(list);
         }
-    }*/
+    }
 
-    @DeleteMapping(path = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    @DeleteMapping(path = "/user/{id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
         try {
             userRepo.deleteById(id);
             return ResponseEntity.ok(Collections.singletonMap("message", "User successful deleted."));

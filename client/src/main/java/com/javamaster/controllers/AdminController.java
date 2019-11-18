@@ -55,14 +55,15 @@ public class AdminController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Map> request = new HttpEntity<>(map, headers);
-        restTemplate.postForObject(API_URL + "user", request, User.class);
-
+        restTemplate.postForObject(API_URL + "user", request, List.class);
         return "redirect:/admin/users";
     }
 
     @RequestMapping("/users/remove/{id}")
     public String removeUser(@PathVariable("id") long id) {
-
+        Map < String, Long > params = new HashMap < >();
+        params.put("id", id);
+        restTemplate.delete(API_URL + "user/{id}", params);
         return "redirect:/admin/users";
     }
 
@@ -73,7 +74,14 @@ public class AdminController {
             Role role = roleRepo.getRoleByRoleName(roleStr);
             user.getRoles().add(role);
         }
+        Map<String, Object> map = new HashMap<>();user.setId(id);
+        map.put("user", user);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<Map> request = new HttpEntity<>(map, headers);
+
+        restTemplate.put(API_URL + "user/update", request);
         return "redirect:/admin/users";
     }
 }
