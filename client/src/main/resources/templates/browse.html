@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{main :: layout (~{::body}, 'Browse Users')}"
+      lang="en">
+<body>
+<div class="container my-2">
+    <h2>Admin panel</h2>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#users">Users table</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#create">Add new User</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="users" class="container tab-pane active">
+            <h3>Users table</h3>
+            <table class="table table-striped table-responsive-md">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${listUsers}">
+                    <td th:text="${user.getUsername()}"></td>
+                    <td th:text="${user.password}">
+                    <td th:each="search : ${user.getAuthorities()}">
+                        <a th:text="${search.getAuthority()}"></a>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="${'#modal_' + user.getId()}" name="user">
+                            Edit
+                        </button>
+                    </td>
+                    <td><a th:href="@{/admin/users/remove/{id}(id=${user.getId()})}" class="btn btn-primary"><i
+                            class="fas fa-user-times ml-2"></i></a>
+                    </td>
+                    <div class="modal" th:id="${'modal_' + user.getId()}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Edit user</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <div class="col-md-8">
+                                        <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-form-label">Name</label>
+                                                    <input type="text" th:value="*{login}" name="login" class="form-control" placeholder="Name" />
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="password" class="col-form-label">Password</label>
+                                                    <label>
+                                                        <input type="text" th:value="*{password}" name="password" class="form-control"  placeholder="Password" />
+                                                    </label>
+                                                </div>
+                                                <div class="form-group col-md-8">
+                                                    <label class="col-form-label">Role</label>
+                                                    <li th:each="role : ${roleList}">
+                                                        <label th:text="${role.getAuthority()}"></label>
+                                                        <label>
+                                                            <input type="checkbox" name="searchValues" th:value="${role.getAuthority()}"
+                                                                   th:checked="${user.getRoles().contains(role) ? 'checked' : 'false'}" />
+                                                        </label>
+                                                    </li>
+                                                </div>
+                                            </div>
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">User edit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="create" class="container tab-pane fade">
+            <h3>Add user</h3>
+            <form th:action="@{/admin/users/add}" th:object="${user}" method="post">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="username" class="col-form-label">Username</label> <input type="text"
+                                                                                             th:field="*{login}"
+                                                                                             class="form-control"
+                                                                                             id="username"
+                                                                                             placeholder="Username">
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="password" class="col-form-label">Password</label> <input type="text"
+                                                                                             th:field="*{password}"
+                                                                                             class="form-control"
+                                                                                             id="password"
+                                                                                             placeholder="Password">
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label for="username" class="col-form-label">Role</label>
+                        <li th:each="role : ${roleList}">
+                            <label th:text="${role.getAuthority()}"></label>
+                            <input type="checkbox" name="searchValues" th:value="${role.getAuthority()}"/>
+                        </li>
+                    </div>
+
+                    <div class="col-md-6">
+                        <input type="submit" class="btn btn-primary" value="Add User">
+                    </div>
+                    <div class="form-group col-md-8"></div>
+                </div>
+            </form>
+            </div>
+    </div>
+</div>
+</body>
+</html>

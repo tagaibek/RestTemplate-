@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{main :: layout (~{::body}, 'User')}"
+      lang="en">
+<body>
+<h3> User page </h3>
+<br/>
+<h5>Hello <output th:text="*{loadUser.username}"></output> !</h5>
+</body>
+</html>
