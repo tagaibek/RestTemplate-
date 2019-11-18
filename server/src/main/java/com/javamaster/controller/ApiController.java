@@ -54,7 +54,7 @@ public class ApiController {
     }
 
     @PutMapping(path = "/user/update")
-    public ResponseEntity<List<User>> update(@RequestBody Map<String, Object> map) {
+    public ResponseEntity<?> update(@RequestBody Map<String, Object> map) {
         CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter(roleRepo);
         LinkedHashMap hashMap = (LinkedHashMap) map.get("user");
         User user = customUserToUserConverter.convert(hashMap );
@@ -62,9 +62,7 @@ public class ApiController {
         if (userUpd == null) {
             return ResponseEntity.notFound().build();
         } else {
-            List<User> list = new ArrayList<>();
-            list.add(userUpd);
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(Collections.singletonMap("message", "User successful updated."));
         }
     }
 
