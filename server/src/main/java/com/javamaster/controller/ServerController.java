@@ -1,37 +1,42 @@
 package com.javamaster.controller;
 
-import com.javamaster.converter.CustomUserToUserConverter;
+import com.javamaster.converters.MapToUserConverter;
+import com.javamaster.model.Role;
 import com.javamaster.model.User;
 import com.javamaster.repos.RoleRepo;
 import com.javamaster.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("/api")
-public class ApiController {
+@RequestMapping("/api/v1")
+public class ServerController {
+
     @Autowired
     private UserRepo userRepo;
     @Autowired
     private RoleRepo roleRepo;
-    
+
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> users() {
         return ResponseEntity.ok(userRepo.findAll());
     }
 
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> roles() {
+        return ResponseEntity.ok(roleRepo.findAll());
+    }
+
     @PostMapping(path = "/user")
     public ResponseEntity<List<User>> create(@RequestBody Map<String, Object> map) {
-        CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter(roleRepo);
+        MapToUserConverter customUserToUserConverter = new MapToUserConverter(roleRepo);
 
         LinkedHashMap hashMap = (LinkedHashMap) map.get("customUser");
-        User user = customUserToUserConverter.convert(hashMap );
-
+        User user = customUserToUserConverter.convert(hashMap);
         User userNew = userRepo.save(user);
         if (userNew == null) {
             return ResponseEntity.notFound().build();
@@ -44,9 +49,9 @@ public class ApiController {
 
     @PutMapping(path = "/user/update")
     public ResponseEntity<?> update(@RequestBody Map<String, Object> map) {
-        CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter(roleRepo);
-        LinkedHashMap hashMap = (LinkedHashMap) map.get("user");
-        User user = customUserToUserConverter.convert(hashMap );
+        MapToUserConverter customUserToUserConverter = new MapToUserConverter(roleRepo);
+        LinkedHashMap hashMap = (LinkedHashMap) map.get("customUser");
+        User user = customUserToUserConverter.convert(hashMap);
         User userUpd = userRepo.save(user);
         if (userUpd == null) {
             return ResponseEntity.notFound().build();
@@ -62,6 +67,19 @@ public class ApiController {
             return ResponseEntity.ok(Collections.singletonMap("message", "User successful deleted."));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @PostMapping(path = "/user/id")
+    public ResponseEntity<List<User>> user(@RequestBody Map<String, Object> map) {
+        String id = map.get("id").toString();
+        Optional<User> optionalUser = userRepo.findById(Long.parseLong(id));
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            List<User> list = new ArrayList<>();
+            list.add(optionalUser.get());
+            return ResponseEntity.ok(list);
         }
     }
 }

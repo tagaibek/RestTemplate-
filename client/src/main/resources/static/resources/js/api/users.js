@@ -1,4 +1,3 @@
-/*
 $(document).ready(function () {
     $.get('/api/users', function users(users) {
         for (const user of users) {
@@ -100,4 +99,4 @@ function edit_ajax_submit() {
             $('#user-list').trigger('click');
         }
     });
-}*/
+}
