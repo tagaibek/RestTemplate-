@@ -18,18 +18,7 @@ public class ApiController {
     private UserRepo userRepo;
     @Autowired
     private RoleRepo roleRepo;
-
-
-    @GetMapping(path = "/user/{id}")
-    public ResponseEntity<User> user(@PathVariable Long id) {
-        Optional<User> optionalUser = userRepo.findById(id);
-        if (!optionalUser.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-        else {
-            return ResponseEntity.ok(optionalUser.get());
-        }
-    }
+    
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> users() {
