@@ -27,54 +27,7 @@
                 </tr>
                 </thead>
                 <tbody id="user-list">
-                <div class="modal"  id="edit-form">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit user</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-
-                            <!-- Modal body -->
-                            <div class="modal-body">
-                                <div class="col-md-8">
-                                    <form id="update-user" >
-                                        <div class="row">
-                                            <input type="hidden" id="id_edit"  name="id" value="id_edit">
-                                            <div class="form-group col-md-6">
-                                                <label class="col-form-label">Name</label>
-                                                <input type="text"  id="username_edit" name="username" class="form-control" placeholder="Name" />
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label  class="col-form-label">Password</label>
-                                                <label>
-                                                    <input type="text"  id="password_edit" name="password" class="form-control"  placeholder="Password" />
-                                                </label>
-                                            </div>
-                                            <div class="form-group col-md-8">
-                                                <label   class="col-form-label">Role</label>
-                                                <li th:each="role : ${roleList}">
-                                                    <label th:text="${role.getAuthority()}"></label>
-                                                    <label for="roles_edit">
-                                                    </label><input type="checkbox" id="roles_edit" name="roles" th:value="${role.getAuthority()}"/>
-                                                </li>
-                                            </div>
-                                        </div>
-                                        <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" id="close_edit" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">User edit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </tbody>
-
             </table>
         </div>
         <div id="create" class="container tab-pane fade">
@@ -83,18 +36,18 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label  class="col-form-label">Username</label>
-                        <input type="text" class="form-control"  name="username" placeholder="Username" />
+                        <input type="text" class="form-control" id="new_username" name="username" placeholder="Username" />
                     </div>
                     <div class="form-group col-md-8">
                         <label  class="col-form-label">Password</label>
-                        <input type="text" class="form-control"  name="password" placeholder="Password" />
+                        <input type="text" class="form-control"  id="new_password" name="password" placeholder="Password" />
                     </div>
 
                     <div class="form-group col-md-8">
                         <label   class="col-form-label">Role</label>
                         <li th:each="role : ${roleList}">
                             <label th:text="${role.getAuthority()}"></label>
-                            <input type="checkbox" name="roles" th:value="${role.getAuthority()}"/>
+                            <input type="checkbox" class="check" id="addUserRole" name="roles" th:value="${role.getAuthority()}"/>
                         </li>
                     </div>
 
@@ -106,5 +59,52 @@
         </div>
     </div>
 </div>
+<div class="modal"  id="edit-form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit user</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="col-md-8">
+                    <form id="update-user" >
+                        <div class="row">
+                            <input type="hidden" id="id_edit"  name="id">
+                            <div class="form-group col-md-6">
+                                <label class="col-form-label">Name</label>
+                                <input type="text"  id="username_edit" name="username" class="form-control" placeholder="Name" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label  class="col-form-label">Password</label>
+                                <label>
+                                    <input type="text"  id="password_edit" name="password" class="form-control"  placeholder="Password" />
+                                </label>
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label   class="col-form-label">Role</label>
+                                <li th:each="role : ${roleList}">
+                                    <label th:text="${role.getAuthority()}"></label>
+                                    <label>
+                                    </label><input type="checkbox" class="check_box" id="roles_edit" name="roles" th:value="${role.getAuthority()}"/>
+                                </li>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="close_edit" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">User edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

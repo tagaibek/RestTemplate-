@@ -5,39 +5,6 @@ $(document).ready(function () {
         }
     });
 });
-
-$(document).ready(function () {
-    $("#add_form").submit(function (event) {
-        event.preventDefault();
-        fire_ajax_submit();
-    });
-});
-
-function fire_ajax_submit() {
-    $.ajax({
-        url: "/api/user",
-        type: 'POST',
-        data: $("#add_form").serialize(),
-        success: function (user) {
-            users_table(user);
-            $('#users-tab').trigger('click');
-        }
-    });
-}
-function deleteUser(id) {
-    $.ajax({
-        url: "/api/user/"  +  id,
-        type: 'DELETE',
-        success: function (data, textStatus, xhr) {
-            if (xhr.status === 200){
-
-                $('#user-list tr#'+id).remove();
-                $('#user-list').trigger('click');
-
-            }
-        }
-    });
-}
 function  users_table(user) {
     let tr = $(document.createElement('tr'));
     tr.attr('id', user.id);
@@ -50,8 +17,10 @@ function  users_table(user) {
     tr.append(tdPassword);
 
     let tdRoles = $(document.createElement('td'));
+    let a = $(document.createElement("a"))
     for (const role of user.roles) {
-        tdRoles.text(role.authority);
+        a.append(role.authority+" ;  ");
+        tdRoles.append(a);
     }
     tr.append(tdRoles);
 
@@ -68,6 +37,53 @@ function  users_table(user) {
 
     $('#user-list').append(tr);
 }
+
+function deleteUser(id) {
+    $.ajax({
+        url: "/api/user/"  +  id,
+        type: 'DELETE',
+        success: function (data, textStatus, xhr) {
+            if (xhr.status === 200){
+
+                $('#user-list tr#'+id).remove();
+                $('#user-list').trigger('click');
+
+            }
+        }
+    });
+}
+
+$(document).ready(function () {
+    $("#add_user").on('click',function () {
+        var userRoles;
+        var rolesArray = [];
+        $('.check').each(function(){
+            if (this.checked){
+                rolesArray.push(this.value);
+            }
+        });
+
+        userRoles = JSON.parse(JSON.stringify(rolesArray));
+        var addUser = {
+            username: $("#new_username").val(),
+            password: $("#new_password").val(),
+            roles: userRoles
+        };
+        $.ajax({
+            url: "/api/user",
+            type: 'POST',
+            data: JSON.stringify(addUser),
+            contentType: "application/json",
+            success: function (user) {
+                users_table(user);
+                $('#users-tab').trigger('click');
+            }
+        });
+    });
+});
+
+
+
 function editUser(id){
     $.ajax({
         url: "/api/user/"  +  id,
@@ -76,27 +92,41 @@ function editUser(id){
             $('#id_edit').val(user.id);
             $('#username_edit').val(user.username);
             $('#password_edit').val(user.password);
-            $('#roles_edit').val(user.roles);
             $.ajax($('.modal').modal('show'))
         }
     });
 }
 $(document).ready(function() {
-    $("#update-user").submit(function (event){
-        event.preventDefault ();
-        edit_ajax_submit();
+    $("#update-user").submit(function (){
+        var userRoles;
+        var rolesArray = [];
+        $('.check_box').each(function(){
+            if (this.checked){
+                rolesArray.push(this.value);
+            }
+        });
+
+        userRoles = JSON.parse(JSON.stringify(rolesArray));
+        var addUser = {
+            id: $("#id_edit").val(),
+            username: $("#username_edit").val(),
+            password: $("#password_edit").val(),
+            roles: userRoles
+        };
+        console.log(addUser.id);
+        $.ajax({
+            url: "/api/user/update",
+            type: 'PUT',
+            data: JSON.stringify(addUser),
+            contentType: "application/json",
+            success: function (user) {
+                users_table(user);
+                $('#users-tab').trigger('click');
+                $('#user-list tr#'+user.id).remove();
+                users_table(user);
+                $('#close_edit').trigger('click');
+                $('#user-list').trigger('click');
+            }
+        });
     });
 });
-function edit_ajax_submit() {
-    $.ajax({
-        url: "/api/user/update",
-        type: 'PUT',
-        data: $("#update-user").serialize(),
-        success: function (user) {
-            $('#user-list tr#'+user.id).remove();
-            users_table(user);
-            $('#close_edit').trigger('click');
-            $('#user-list').trigger('click');
-        }
-    });
-}

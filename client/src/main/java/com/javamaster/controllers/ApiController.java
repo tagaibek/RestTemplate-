@@ -1,8 +1,6 @@
 package com.javamaster.controllers;
 
 
-import com.javamaster.model.CustomUser;
-import com.javamaster.model.Role;
 import com.javamaster.model.User;
 import com.javamaster.sevice.ApiService;
 import org.springframework.http.MediaType;
@@ -26,10 +24,9 @@ public class ApiController {
         return ResponseEntity.ok(apiService.users());
     }
 
-    @PostMapping(path = "/user", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<User> create(CustomUser customUser) {
-        List<Role> roles = apiService.roles();
-        User userNew = apiService.user(customUser,roles);
+    @PostMapping(path = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> create(@RequestBody  User user) {
+        User userNew = apiService.user(user);
         if (userNew == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -48,10 +45,9 @@ public class ApiController {
         }
     }
 
-    @PutMapping(path = "/user/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<User> update(CustomUser customUser) {
-        List<Role> roles = apiService.roles();
-        User userUpd = apiService.update(customUser,roles);
+    @PutMapping(path = "/user/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> update( @RequestBody User user) {
+        User userUpd = apiService.update(user);
         if (userUpd == null) {
             return ResponseEntity.notFound().build();
         } else {

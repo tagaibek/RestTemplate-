@@ -17,6 +17,7 @@ public class AdminController {
     @RequestMapping(value = {"", "/users"}, method = RequestMethod.GET)
     public String listUsers(Model model ){
         model.addAttribute("roleList", apiService.roles());
+        model.addAttribute("listUsers", apiService.users());
         return "browse2";
     }
 }

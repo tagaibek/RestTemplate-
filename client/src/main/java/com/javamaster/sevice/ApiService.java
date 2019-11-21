@@ -1,8 +1,6 @@
 package com.javamaster.sevice;
 
 import com.javamaster.converter.CustomListToUser;
-import com.javamaster.converter.CustomUserToUserConverter;
-import com.javamaster.model.CustomUser;
 import com.javamaster.model.Role;
 import com.javamaster.model.User;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -44,12 +42,9 @@ public class ApiService {
         else return null;
     }
 
-    public User user(CustomUser customUser, List<Role> roles){
+    public User user(User user){
         Map<String, Object> map = new HashMap<>();
-        CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter();
-        User user = customUserToUserConverter.convert(customUser, roles);
         map.put("customUser", user);
-
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Map> request = new HttpEntity<>(map, headers);
@@ -65,12 +60,9 @@ public class ApiService {
         restTemplate.delete(API_URL + "user/{id}", params);
     }
 
-    public User update(CustomUser customUser, List<Role> roles){
-        CustomUserToUserConverter customUserToUserConverter = new CustomUserToUserConverter();
-        User user = customUserToUserConverter.convert(customUser, roles);
-
+    public User update(User user){
         Map<String, Object> map = new HashMap<>();
-        map.put("customUser", user);
+        map.put("user", user);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Map> request = new HttpEntity<>(map, headers);

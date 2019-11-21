@@ -33,10 +33,9 @@ public class ServerController {
 
     @PostMapping(path = "/user")
     public ResponseEntity<List<User>> create(@RequestBody Map<String, Object> map) {
-        MapToUserConverter customUserToUserConverter = new MapToUserConverter(roleRepo);
-
+        MapToUserConverter mapToUserConverter = new MapToUserConverter(roleRepo);
         LinkedHashMap hashMap = (LinkedHashMap) map.get("customUser");
-        User user = customUserToUserConverter.convert(hashMap);
+        User user = mapToUserConverter.convert(hashMap);
         User userNew = userRepo.save(user);
         if (userNew == null) {
             return ResponseEntity.notFound().build();
@@ -49,9 +48,9 @@ public class ServerController {
 
     @PutMapping(path = "/user/update")
     public ResponseEntity<?> update(@RequestBody Map<String, Object> map) {
-        MapToUserConverter customUserToUserConverter = new MapToUserConverter(roleRepo);
-        LinkedHashMap hashMap = (LinkedHashMap) map.get("customUser");
-        User user = customUserToUserConverter.convert(hashMap);
+        MapToUserConverter mapToUserConverter = new MapToUserConverter(roleRepo);
+        LinkedHashMap hashMap = (LinkedHashMap) map.get("user");
+        User user = mapToUserConverter.convert(hashMap);
         User userUpd = userRepo.save(user);
         if (userUpd == null) {
             return ResponseEntity.notFound().build();

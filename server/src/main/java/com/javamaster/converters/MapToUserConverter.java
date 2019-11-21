@@ -38,9 +38,10 @@ public class MapToUserConverter {
 
     private Role addRole(LinkedHashMap o) {
         Role role = new Role();
-        String id = o.get("id").toString();
-        role.setId(Long.parseLong(id));
         role.setRoleName(o.get("roleName").toString());
+        if (role.getRoleName().equals("ROLE_ADMIN")){
+            role.setId((long) 1);
+        }else  role.setId((long) 2);
         return role;
     }
 }

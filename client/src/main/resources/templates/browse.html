@@ -38,10 +38,11 @@
                             Edit
                         </button>
                     </td>
-                    <td><a th:href="@{/admin/users/remove/{id}(id=${user.getId()})}" class="btn btn-primary"><i
-                            class="fas fa-user-times ml-2"></i></a>
+                    <td><a onclick="deleteUser(this.id)" class="btn btn-primary" th:id="${user.id}" ><i
+                            class="fas fa-user-times ml-2"></i>
+                       </a>
                     </td>
-                    <div class="modal" th:id="${'modal_' + user.getId()}">
+                    <div class="modal" th:id="${'modal_' + user.getId()}" id="modal_edit">
                         <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -54,16 +55,17 @@
                                 <!-- Modal body -->
                                 <div class="modal-body">
                                     <div class="col-md-8">
-                                        <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+                                        <form id="user_edit" th:object="${user}">
                                             <div class="row">
+                                                <input type="hidden"  name="id"  th:value="*{id}" >
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label">Name</label>
-                                                    <input type="text" th:value="*{login}" name="login" class="form-control" placeholder="Name" />
+                                                    <input type="text" id="username_edit" th:value="*{login}" name="username" class="form-control" placeholder="Name" />
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label for="password" class="col-form-label">Password</label>
+                                                    <label class="col-form-label">Password</label>
                                                     <label>
-                                                        <input type="text" th:value="*{password}" name="password" class="form-control"  placeholder="Password" />
+                                                        <input type="text" id="password_edit" th:value="*{password}" name="password" class="form-control"  placeholder="Password" />
                                                     </label>
                                                 </div>
                                                 <div class="form-group col-md-8">
@@ -71,7 +73,7 @@
                                                     <li th:each="role : ${roleList}">
                                                         <label th:text="${role.getAuthority()}"></label>
                                                         <label>
-                                                            <input type="checkbox" name="searchValues" th:value="${role.getAuthority()}"
+                                                            <input type="checkbox" id="roles_edit" name="roles" th:value="${role.getAuthority()}"
                                                                    th:checked="${user.getRoles().contains(role) ? 'checked' : 'false'}" />
                                                         </label>
                                                     </li>
@@ -80,7 +82,7 @@
                                             <!-- Modal footer -->
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">User edit</button>
+                                                <button type="submit" class="btn btn-primary" onclick="edit_user()">User edit</button>
                                             </div>
                                         </form>
                                     </div>
@@ -95,38 +97,31 @@
         </div>
         <div id="create" class="container tab-pane fade">
             <h3>Add user</h3>
-            <form th:action="@{/admin/users/add}" th:object="${user}" method="post">
+            <form id="add_form">
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="username" class="col-form-label">Username</label> <input type="text"
-                                                                                             th:field="*{login}"
-                                                                                             class="form-control"
-                                                                                             id="username"
-                                                                                             placeholder="Username">
+                        <label  class="col-form-label">Username</label>
+                        <input type="text" class="form-control"  name="username" placeholder="Username" />
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="password" class="col-form-label">Password</label> <input type="text"
-                                                                                             th:field="*{password}"
-                                                                                             class="form-control"
-                                                                                             id="password"
-                                                                                             placeholder="Password">
+                        <label  class="col-form-label">Password</label>
+                        <input type="text" class="form-control"  name="password" placeholder="Password" />
                     </div>
 
                     <div class="form-group col-md-8">
-                        <label for="username" class="col-form-label">Role</label>
+                        <label   class="col-form-label">Role</label>
                         <li th:each="role : ${roleList}">
                             <label th:text="${role.getAuthority()}"></label>
-                            <input type="checkbox" name="searchValues" th:value="${role.getAuthority()}"/>
+                            <input type="checkbox" name="roles" th:value="${role.getAuthority()}"/>
                         </li>
                     </div>
 
                     <div class="col-md-6">
-                        <input type="submit" class="btn btn-primary" value="Add User">
+                        <input type="submit" id="add_user" class="btn btn-primary">
                     </div>
-                    <div class="form-group col-md-8"></div>
                 </div>
             </form>
-            </div>
+        </div>
     </div>
 </div>
 </body>
