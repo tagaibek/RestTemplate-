@@ -32,7 +32,7 @@
         </div>
         <div id="create" class="container tab-pane fade">
             <h3>Add user</h3>
-            <form id="add_form">
+            <!--<form id="add_form">-->
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label  class="col-form-label">Username</label>
@@ -52,10 +52,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <input type="submit" id="add_user" class="btn btn-primary">
+                        <input type="submit" onclick="add_new_user()" id="add_user" class="btn btn-primary">
                     </div>
                 </div>
-            </form>
+         <!--   </form>-->
         </div>
     </div>
 </div>
@@ -72,7 +72,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="col-md-8">
-                    <form id="update-user">
+                   <!-- <form id="update-user">-->
                         <div class="row">
                             <input type="hidden" id="id_edit"  name="id">
                             <div class="form-group col-md-6">
@@ -96,9 +96,9 @@
                         <!-- Modal footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="close_edit" onclick="edit()" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">User edit</button>
+                            <button type="button" onclick="submit_edit()" class="btn btn-primary">User edit</button>
                         </div>
-                    </form>
+                   <!-- </form>-->
                 </div>
             </div>
         </div>

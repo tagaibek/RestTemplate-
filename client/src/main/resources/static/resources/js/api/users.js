@@ -44,7 +44,6 @@ function deleteUser(id) {
         type: 'DELETE',
         success: function (data, textStatus, xhr) {
             if (xhr.status === 200){
-
                 $('#user-list tr#'+id).remove();
                 $('#user-list').trigger('click');
 
@@ -53,8 +52,7 @@ function deleteUser(id) {
     });
 }
 
-$(document).ready(function () {
-    $("#add_user").on('click',function () {
+function add_new_user(){
         var userRoles;
         var rolesArray = [];
         $('.check').each(function(){
@@ -79,8 +77,7 @@ $(document).ready(function () {
                 $('#users-tab').trigger('click');
             }
         });
-    });
-});
+}
 
 function editUser(id){
     $.ajax({
@@ -102,8 +99,7 @@ function editUser(id){
         }
     });
 }
-$(document).ready(function() {
-    $("#update-user").submit(function (){
+function submit_edit() {
         var userRoles;
         var rolesArray = [];
         $('.check_edit').each(function(){
@@ -134,8 +130,7 @@ $(document).ready(function() {
                 $('#user-list').trigger('click');
             }
         });
-    });
-});
+}
 
 function edit() {
     $('.check_edit').each(function () {

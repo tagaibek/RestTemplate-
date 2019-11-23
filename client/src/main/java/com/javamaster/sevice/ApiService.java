@@ -49,8 +49,10 @@ public class ApiService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<Map> request = new HttpEntity<>(map, headers);
         List list = restTemplate.postForObject(API_URL + "user", request, List.class);
-        if (list != null){
-            return user;
+        CustomListToUser customListToUser = new CustomListToUser();
+        List<User> users = customListToUser.convert(list);
+        if (users.get(0) != null){
+            return users.get(0);
         } else return null;
     }
 
