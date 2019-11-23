@@ -82,8 +82,6 @@ $(document).ready(function () {
     });
 });
 
-
-
 function editUser(id){
     $.ajax({
         url: "/api/user/"  +  id,
@@ -92,6 +90,14 @@ function editUser(id){
             $('#id_edit').val(user.id);
             $('#username_edit').val(user.username);
             $('#password_edit').val(user.password);
+            for (const role of user.roles){
+                $('.check_edit').each(function () {
+                    var role_edit = this.value;
+                    if (role.authority === role_edit){
+                        $(this).prop('checked', true);
+                    }
+                });
+            }
             $.ajax($('.modal').modal('show'))
         }
     });
@@ -100,7 +106,7 @@ $(document).ready(function() {
     $("#update-user").submit(function (){
         var userRoles;
         var rolesArray = [];
-        $('.check_box').each(function(){
+        $('.check_edit').each(function(){
             if (this.checked){
                 rolesArray.push(this.value);
             }
@@ -130,3 +136,9 @@ $(document).ready(function() {
         });
     });
 });
+
+function edit() {
+    $('.check_edit').each(function () {
+        $(this).prop('checked', false);
+    });
+}
